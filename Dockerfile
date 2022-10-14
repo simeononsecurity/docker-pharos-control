@@ -16,4 +16,4 @@ COPY PharosControl-2.0.0-1.ub16.noarch.deb ./
 COPY dockersetup.sh ./
 
 CMD [ "/bin/bash", "./dockersetup.sh" ]
-ENTRYPOINT [ "/bin/bash" ]
+#ENTRYPOINT [ "/bin/bash" ]
