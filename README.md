@@ -1,5 +1,6 @@
 # docker-pharos-control
 Dockerized Pharos Centralized Managment Platform
+[![Docker Image CI](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml/badge.svg)](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml)
 
 
 ### Docker run:
