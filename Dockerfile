@@ -15,5 +15,5 @@ RUN apt-get update && apt full-upgrade -y && apt install -y default-jre-headless
 COPY PharosControl-2.0.0-1.ub16.noarch.deb ./
 COPY dockersetup.sh ./
 
-ENTRYPOINT [ "./dockersetup.sh" ]
-CMD [ "/bin/bash" ]
+CMD [ "./dockersetup.sh" ]
+ENTRYPOINT [ "/bin/sh" ]
