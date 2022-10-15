@@ -16,4 +16,5 @@ COPY PharosControl-2.0.0-1.ub16.noarch.deb ./
 COPY dockersetup.sh ./
 
 CMD [ "./dockersetup.sh" ]
+CMD nohup java -cp "/opt/pharoscontrol/lib/*" com.tplink.hipap.server.backend.PharosControlHeadless
 ENTRYPOINT [ "/bin/bash" ]
