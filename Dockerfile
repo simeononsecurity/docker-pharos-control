@@ -11,9 +11,9 @@ ENV TERM=xterm
 EXPOSE 9321:9321
 
 # Update and Install Packages
-RUN apt-get update && apt full-upgrade -y && apt install -y default-jre-headless default-jdk-headless && apt autoremove -y 
+RUN apt-get update && apt full-upgrade -y && apt dist-upgrade -y && apt install -y default-jre-headless default-jdk-headless && apt autoremove -y 
 COPY PharosControl-2.0.0-1.ub16.noarch.deb ./
 COPY dockersetup.sh ./
 
 CMD [ "./dockersetup.sh" ]
-ENTRYPOINT [ "/bin/sh" ]
+ENTRYPOINT [ "/bin/bash" ]
