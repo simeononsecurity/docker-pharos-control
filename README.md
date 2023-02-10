@@ -2,7 +2,7 @@
 Dockerized Pharos Centralized Managment Platform
 
 
-[![Docker Image CI](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml/badge.svg)](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml/badge.svg)](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml)[![VirusTotal Scan](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/virustotal.yml/badge.svg)](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/virustotal.yml)
 
 
 ### Docker run:
