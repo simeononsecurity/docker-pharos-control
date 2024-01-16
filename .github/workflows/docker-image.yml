@@ -68,17 +68,25 @@ jobs:
           docker buildx build \
             --file Dockerfile
             --platform linux/amd64,linux/armhf,linux/arm64 \
-            -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             -t simeononsecurity/docker-debian-hardened:latest \
             --cache-from type=gha \
             --cache-from type=inline \
             --cache-from type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            --cache-from type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
 
-
+      - name: Build and publish the multiplatform Docker Image
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+          docker buildx build \
+            --file Dockerfile
+            --platform linux/amd64,linux/armhf,linux/arm64 \
+            -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
+            --cache-from type=gha \
+            --cache-from type=inline \
+            --cache-from type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
+            --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
+            --progress=plain --push .
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
