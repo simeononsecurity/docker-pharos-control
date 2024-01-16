@@ -65,7 +65,6 @@ jobs:
       - name: Build and Push
         run: |
           docker buildx build \
-            --context . \
             --file Dockerfile \
             --tag ${DOCKER_USERNAME}/docker-pharos-control:latest \
             --tag ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
