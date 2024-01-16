@@ -39,6 +39,7 @@ jobs:
           push: true
           sbom: true
           provenance: mode=max
+          outputs: type=registry
           platforms: |
             linux/amd64
             linux/armhf
