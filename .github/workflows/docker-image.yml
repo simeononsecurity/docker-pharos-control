@@ -115,12 +115,7 @@ jobs:
             --cache-from type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
-
-            docker manifest annotate ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest --arch amd64
-            docker manifest annotate ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest --arch arm
-            docker manifest annotate ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest --arch arm64
-              
-            docker manifest push ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Build and publish the multiplatform Docker Image
         run: |
@@ -136,6 +131,7 @@ jobs:
             --cache-from type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
+            docker buildx imagetools inspect ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
