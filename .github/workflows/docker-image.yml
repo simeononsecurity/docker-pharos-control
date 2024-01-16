@@ -32,7 +32,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and push action
+      - name: Build and push amd64 action
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -55,7 +55,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
           github-token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and push action
+      - name: Build and push armhf action
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -78,7 +78,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
           github-token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and push action
+      - name: Build and push arm64 action
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -108,7 +108,6 @@ jobs:
             --file Dockerfile \
             --sbom true\
             --provenance false \
-            --attest type=sbom \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control \
             --cache-from type=gha \
@@ -130,7 +129,6 @@ jobs:
             --file Dockerfile \
             --sbom true \
             --provenance false \
-            --attest type=sbom \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-from type=gha \
