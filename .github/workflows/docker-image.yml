@@ -118,7 +118,7 @@ jobs:
               ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest \
               ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
 
-            docker manifest push ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control
+            docker manifest push ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Build and publish the multiplatform Docker Image
         run: |
