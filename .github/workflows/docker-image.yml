@@ -69,6 +69,11 @@ jobs:
             --cache-from type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
+            # Rebuild Docker manifest with all specified platforms
+            docker manifest create simeononsecurity/docker-debian-hardened:latest \
+              --platforms linux/amd64,linux/armhf,linux/arm64 \
+              simeononsecurity/docker-debian-hardened:latest
+
             docker manifest push simeononsecurity/docker-debian-hardened:latest
 
       - name: Build and publish the multiplatform Docker Image
@@ -83,7 +88,12 @@ jobs:
             --cache-from type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
-          docker manifest push ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            # Rebuild Docker manifest with all specified platforms
+            docker manifest create ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
+              --platforms linux/amd64,linux/armhf,linux/arm64 \
+              ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+
+            docker manifest push ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
