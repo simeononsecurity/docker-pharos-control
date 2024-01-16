@@ -44,6 +44,7 @@ jobs:
       with:
         context: .
         push: true
+        load: true
         platforms: linux/amd64,linux/armhf,linux/arm64
         file: Dockerfile
         cache-from: |
