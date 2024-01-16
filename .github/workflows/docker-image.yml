@@ -39,10 +39,6 @@ jobs:
             --file Dockerfile \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control \
-            --cache-from type=gha \
-            --cache-from type=inline \
-            --cache-from type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
             docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
@@ -53,10 +49,6 @@ jobs:
             --file Dockerfile \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            --cache-from type=gha \
-            --cache-from type=inline \
-            --cache-from type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
             docker buildx imagetools inspect ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
