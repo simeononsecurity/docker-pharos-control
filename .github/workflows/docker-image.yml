@@ -115,10 +115,6 @@ jobs:
             --cache-from type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
-            docker manifest create ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-              ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest \
-              ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest \
-              ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
 
             docker manifest annotate ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest --arch amd64
             docker manifest annotate ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest --arch arm
