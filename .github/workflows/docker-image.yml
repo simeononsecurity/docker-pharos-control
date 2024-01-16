@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           sbom: true
-          provenance: false
+          provenance: true
           outputs: type=registry
           platforms: |
             linux/amd64
@@ -61,7 +61,7 @@ jobs:
           context: .
           push: true
           sbom: true
-          provenance: false
+          provenance: true
           outputs: type=registry
           platforms: |
             linux/armhf
@@ -84,7 +84,7 @@ jobs:
           context: .
           push: true
           sbom: true
-          provenance: false
+          provenance: true
           outputs: type=registry
           platforms: |
             linux/arm64
