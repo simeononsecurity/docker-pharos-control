@@ -106,6 +106,9 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
             --file Dockerfile \
+            --sbom \
+            --provenance false \
+            --attest type=sbom \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control \
             --cache-from type=gha \
@@ -125,6 +128,9 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
             --file Dockerfile \
+            --sbom \
+            --provenance false \
+            --attest type=sbom \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-from type=gha \
