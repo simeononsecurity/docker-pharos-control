@@ -32,82 +32,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and push amd64 action
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          sbom: true
-          provenance: true
-          outputs: type=registry
-          platforms: |
-            linux/amd64
-          file: Dockerfile
-          cache-from: |
-            type=gha .
-            type=inline .
-            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
-          cache-to: |
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
-          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
-          github-token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Build and push armhf action
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          sbom: true
-          provenance: true
-          outputs: type=registry
-          platforms: |
-            linux/armhf
-          file: Dockerfile
-          cache-from: |
-            type=gha .
-            type=inline .
-            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
-          cache-to: |
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
-          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
-          github-token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Build and push arm64 action
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          sbom: true
-          provenance: true
-          outputs: type=registry
-          platforms: |
-            linux/arm64
-          file: Dockerfile
-          cache-from: |
-            type=gha .
-            type=inline .
-            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
-          cache-to: |
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
-          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
-          github-token: ${{ secrets.PAT_TOKEN }}
-
       - name: Build and publish the multiplatform Docker Image
         run: |
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
             --file Dockerfile \
-            --sbom true\
-            --provenance false \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control \
             --cache-from type=gha \
@@ -122,8 +51,6 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
             --file Dockerfile \
-            --sbom true \
-            --provenance false \
             --platform linux/amd64,linux/armhf,linux/arm64 \
             -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-from type=gha \
