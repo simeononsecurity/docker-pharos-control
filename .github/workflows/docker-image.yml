@@ -61,23 +61,21 @@ jobs:
         run: |
           docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
           docker buildx imagetools inspect ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-
-      - name: Build and Push
+            
+      - name: Build and publish the multiplatform Docker Image 
         run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
-            --file Dockerfile \
-            --tag ${DOCKER_USERNAME}/docker-pharos-control:latest \
-            --tag ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
-            --push \
-            --platform linux/amd64,linux/armhf,linux/arm64 \
-            --cache-from type=gha,scope=. \
-            --cache-from type=inline,mode=max \
-            --cache-from type=registry,ref=${DOCKER_USERNAME}/docker-pharos-control:latest \
-            --cache-from type=registry,ref=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
-            --cache-to type=registry,ref=${DOCKER_USERNAME}/docker-pharos-control:latest \
-            --cache-to type=registry,ref=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
-            --output type=image,name=${DOCKER_USERNAME}/docker-pharos-control:latest,push=true \
-            --output type=image,name=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest,push=true
+          --platform linux/amd64,linux/armhf,linux/arm64 \
+          -t ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
+          -t ghcr.io/simeononsecurity/docker-debian-hardened:latest \
+          --cache-from type=gha \
+          --cache-from type=inline \
+          --cache-from type=registry,ref=${DOCKER_USERNAME}/docker-pharos-control:latest \
+          --cache-from type=registry,ref=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
+          --cache-to type=registry,ref=${DOCKER_USERNAME}/docker-pharos-control:latest \
+          --cache-to type=registry,ref=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
+          --progress=plain --push .
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
