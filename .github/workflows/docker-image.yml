@@ -32,7 +32,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_TOKEN }}
 
-
+      - name: Build and push action
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          sbom: true
+          provenance: false
+          outputs: type=registry
+          platforms: |
+            linux/amd64
+            linux/armhf
+            linux/arm64
+          file: Dockerfile
+          cache-from: |
+            type=gha .
+            type=inline .
+            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+          github-token: ${{ secrets.PAT_TOKEN }}
 
       - name: Build and publish the multiplatform Docker Image
         run: |
@@ -47,12 +70,8 @@ jobs:
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
             # Rebuild Docker manifest
-            docker manifest create simeononsecurity/docker-debian-hardened:latest \
-              simeononsecurity/docker-debian-hardened:latest-amd64 \
-              simeononsecurity/docker-debian-hardened:latest-armhf \
-              simeononsecurity/docker-debian-hardened:latest-arm64
+            docker manifest create simeononsecurity/docker-debian-hardened:latest
             docker manifest push simeononsecurity/docker-debian-hardened:latest
-
 
       - name: Build and publish the multiplatform Docker Image
         run: |
@@ -67,16 +86,8 @@ jobs:
             --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
           # Rebuild Docker manifest
-          docker manifest create ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest-amd64 \
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest-armhf \
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest-arm64
+          docker manifest create ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
           docker manifest push ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-
-      - name: Inspect Docker Image
-        run: |
-          docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-          docker buildx imagetools inspect ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
