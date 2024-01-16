@@ -49,10 +49,10 @@ jobs:
         cache-from: |
           type=gha .
           type=inline .
-          simeononsecurity/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-          type=registry,ref=simeononsecurity/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+          ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+          type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
         cache-to: |
-          type=registry,ref=simeononsecurity/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-        tags: simeononsecurity/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/simeononsecurity/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+          type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
         github-token: ${{ secrets.PAT_TOKEN }}
 
