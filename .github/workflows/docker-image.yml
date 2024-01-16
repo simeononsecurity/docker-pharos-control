@@ -32,7 +32,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push action
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -61,3 +61,28 @@ jobs:
         run: |
           docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
           docker buildx imagetools inspect ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+
+      - name: Build and Push
+        run: |
+          docker buildx build \
+            --context . \
+            --file Dockerfile \
+            --tag ${DOCKER_USERNAME}/docker-pharos-control:latest \
+            --tag ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
+            --push \
+            --platform linux/amd64,linux/armhf,linux/arm64 \
+            --cache-from type=gha,scope=. \
+            --cache-from type=inline,mode=max \
+            --cache-from type=registry,ref=${DOCKER_USERNAME}/docker-pharos-control:latest \
+            --cache-from type=registry,ref=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
+            --cache-to type=registry,ref=${DOCKER_USERNAME}/docker-pharos-control:latest \
+            --cache-to type=registry,ref=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest \
+            --output type=image,name=${DOCKER_USERNAME}/docker-pharos-control:latest,push=true \
+            --output type=image,name=ghcr.io/${DOCKER_USERNAME}/docker-pharos-control:latest,push=true
+
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: peterevans/dockerhub-description
