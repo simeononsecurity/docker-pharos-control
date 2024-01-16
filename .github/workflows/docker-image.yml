@@ -38,6 +38,7 @@ jobs:
           context: .
           push: true
           sbom: true
+          provenance: mode=max
           platforms: |
             linux/amd64
             linux/armhf
