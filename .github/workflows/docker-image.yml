@@ -106,7 +106,7 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
             --file Dockerfile \
-            --sbom \
+            --sbom true\
             --provenance false \
             --attest type=sbom \
             --platform linux/amd64,linux/armhf,linux/arm64 \
@@ -128,7 +128,7 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build \
             --file Dockerfile \
-            --sbom \
+            --sbom true \
             --provenance false \
             --attest type=sbom \
             --platform linux/amd64,linux/armhf,linux/arm64 \
