@@ -32,30 +32,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and push action
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          sbom: true
-          provenance: false
-          outputs: type=registry
-          platforms: |
-            linux/amd64
-            linux/armhf
-            linux/arm64
-          file: Dockerfile
-          cache-from: |
-            type=gha .
-            type=inline .
-            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-          cache-to: |
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-          github-token: ${{ secrets.PAT_TOKEN }}
+
 
       - name: Build and publish the multiplatform Docker Image
         run: |
