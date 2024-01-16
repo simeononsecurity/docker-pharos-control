@@ -57,3 +57,7 @@ jobs:
         tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
         github-token: ${{ secrets.PAT_TOKEN }}
 
+    - name: Inspect Docker Image
+      run: |
+        docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+
