@@ -70,6 +70,7 @@ jobs:
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
             # Rebuild Docker manifest
+            docker manifest create simeononsecurity/docker-debian-hardened:latest simeononsecurity/docker-debian-hardened:latest
             docker manifest push simeononsecurity/docker-debian-hardened:latest
 
       - name: Build and publish the multiplatform Docker Image
@@ -85,6 +86,7 @@ jobs:
             --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
           # Rebuild Docker manifest
+          docker manifest create ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
           docker manifest push ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Docker Hub Description
