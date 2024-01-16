@@ -42,19 +42,63 @@ jobs:
           outputs: type=registry
           platforms: |
             linux/amd64
+          file: Dockerfile
+          cache-from: |
+            type=gha .
+            type=inline .
+            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+          github-token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Build and push action
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          sbom: true
+          provenance: false
+          outputs: type=registry
+          platforms: |
             linux/armhf
+          file: Dockerfile
+          cache-from: |
+            type=gha .
+            type=inline .
+            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
+          cache-to: |
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest
+          github-token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Build and push action
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          sbom: true
+          provenance: false
+          outputs: type=registry
+          platforms: |
             linux/arm64
           file: Dockerfile
           cache-from: |
             type=gha .
             type=inline .
-            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
           cache-to: |
-            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+            type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
+            type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
           github-token: ${{ secrets.PAT_TOKEN }}
 
       - name: Build and publish the multiplatform Docker Image
@@ -63,18 +107,18 @@ jobs:
           docker buildx build \
             --file Dockerfile \
             --platform linux/amd64,linux/armhf,linux/arm64 \
-            -t simeononsecurity/docker-debian-hardened:latest \
+            -t ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control \
             --cache-from type=gha \
             --cache-from type=inline \
             --cache-from type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
-            # Rebuild Docker manifest with all specified platforms
-            docker manifest create simeononsecurity/docker-debian-hardened:latest \
-              --platforms linux/amd64,linux/armhf,linux/arm64 \
-              simeononsecurity/docker-debian-hardened:latest
+            docker manifest create ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
+              ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest \
+              ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:armhf-latest \
+              ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:arm64-latest
 
-            docker manifest push simeononsecurity/docker-debian-hardened:latest
+            docker manifest push ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control
 
       - name: Build and publish the multiplatform Docker Image
         run: |
@@ -88,12 +132,6 @@ jobs:
             --cache-from type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --cache-to type=registry,ref=ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
             --progress=plain --push .
-            # Rebuild Docker manifest with all specified platforms
-            docker manifest create ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-              --platforms linux/amd64,linux/armhf,linux/arm64 \
-              ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-
-            docker manifest push ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
