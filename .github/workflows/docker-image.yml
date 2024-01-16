@@ -32,30 +32,26 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and publish the multiplatform Docker Image
-        run: |
-          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          docker buildx build \
-            --file Dockerfile \
-            --platform linux/amd64,linux/armhf,linux/arm64 \
-            -t ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control \
-            --progress=plain --push .
-            docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
+      - name: Build and push amd64 action
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          sbom: true
+          provenance: true
+          outputs: type=registry
+          platforms: |
+            linux/amd64
+            linux/armhf
+            linux/arm64
+          file: Dockerfile
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest, ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:amd64-latest
+          github-token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Build and publish the multiplatform Docker Image
-        run: |
-          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          docker buildx build \
-            --file Dockerfile \
-            --platform linux/amd64,linux/armhf,linux/arm64 \
-            -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest \
-            --progress=plain --push .
-            docker buildx imagetools inspect ghcr.io/${{ secrets.DOCKER_USERNAME }}/docker-pharos-control:latest
-
-      # - name: Docker Hub Description
-      #   uses: peter-evans/dockerhub-description@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      #     repository: peterevans/dockerhub-description
-      #     enable-url-completion: true
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: peterevans/dockerhub-description
+          enable-url-completion: true
