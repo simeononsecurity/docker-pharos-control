@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           sbom: true
-          provenance: true
+          provenance: mode=max
           outputs: type=registry
           platforms: |
             linux/amd64
