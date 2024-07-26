@@ -1,7 +1,7 @@
 # docker-pharos-control
 Dockerized Pharos Centralized Managment Platform
 
-
+[![Sponsor](https://img.shields.io/badge/Sponsor-Click%20Here-ff69b4)](https://github.com/sponsors/simeononsecurity)
 [![Docker Image CI](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml/badge.svg)](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/docker-image.yml)[![VirusTotal Scan](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/virustotal.yml/badge.svg)](https://github.com/simeononsecurity/docker-pharos-control/actions/workflows/virustotal.yml)
 
 [DockerHub](https://hub.docker.com/r/simeononsecurity/docker-pharos-control)
